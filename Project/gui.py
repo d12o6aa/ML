@@ -3,6 +3,7 @@ from tkinter import Label, Button
 import cv2
 import threading
 import numpy as np
+from PIL import Image, ImageTk
 from tensorflow.keras.models import load_model
 model = load_model('/home/doaa/programming/ML/ML/Project/ModelTesting/model_file_30epochs.h5')
 import sys
@@ -49,22 +50,50 @@ def close_camera():
     cv2.destroyAllWindows()
     
 root = tk.Tk()
-root.title("ComSoc")
+root.title("COMSOC Camera Application")
+root.geometry("1000x600")
 
-photo = tk.PhotoImage(file="/home/doaa/programming/ML/ML/Project/download11.png")
-label = tk.Label(root,image=photo)
-label.image = photo
-label.pack()
+# photo = tk.PhotoImage(file="/home/doaa/programming/ML/ML/Project/ieee.png")
+# label = tk.Label(root,image=photo)
+# label.place(x=0, y=0, relwidth=1, relheight=1)
+
+
+
+img = Image.open("/home/doaa/programming/ML/ML/Project/ieee.png")
+
+# Convert the image to something Tkinter can use
+img_tk = ImageTk.PhotoImage(img)
+
+label = tk.Label(root, image=img_tk)
+label.place(x=0, y=0, relwidth=1, relheight=1)
+
+
+# label.image = photo
+
+
+
+root.configure(bg= "black")
+button_frame = tk.Frame(root,bg="black")
+button_frame.pack(side="bottom", pady=20, padx=50,anchor="center") 
+
 
 btn_open = Button(root,text="Open Camera",
-                  command=lambda:threading.Thread(target=open_camera).start())
-btn_open.pack()
+                  command=lambda:threading.Thread(target=open_camera).start(),
+                  bg="green", fg="white", font=("Helvetica", 14, "bold"), padx=10, pady=10)
+btn_open.pack(in_=button_frame, side="left", padx=20)
 
 
 btn_close = Button(root,
                    text="Close Camera",
-                   command=close_camera)
-btn_close.pack()
+                   command=close_camera,
+                   bg="red", fg="white", font=("Helvetica", 14, "bold"), padx=10, pady=10)
+btn_close.pack(in_=button_frame, side="left", padx=10)
 
+
+# btn_exit = tk.Button(root, text="Exit", command=root.quit, bg="black", fg="white", font=("Helvetica", 14, "bold"), padx=10, pady=10)
+# btn_exit.pack(in_=button_frame, side="left", padx=10)
+
+lbl_video = tk.Label(root)
+lbl_video.pack(pady=20)
 
 root.mainloop()
